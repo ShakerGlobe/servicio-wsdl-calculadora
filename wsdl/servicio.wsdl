@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions
+  name="ServicioCalculadora"
+  targetNamespace="http://www.ejemplo.com/calculadora"
+  xmlns:tns="http://www.ejemplo.com/calculadora"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+  xmlns="http://schemas.xmlsoap.org/wsdl/">
+
+  <!-- Tipos: envolturas request/response por operación -->
+  <types>
+    <xsd:schema targetNamespace="http://www.ejemplo.com/calculadora" elementFormDefault="qualified">
+      <xsd:complexType name="DosNumeros">
+        <xsd:sequence>
+          <xsd:element name="a" type="xsd:double"/>
+          <xsd:element name="b" type="xsd:double"/>
+        </xsd:sequence>
+      </xsd:complexType>
+
+      <xsd:element name="SumarRequest"        type="tns:DosNumeros"/>
+      <xsd:element name="RestarRequest"       type="tns:DosNumeros"/>
+      <xsd:element name="MultiplicarRequest"  type="tns:DosNumeros"/>
+      <xsd:element name="DividirRequest"      type="tns:DosNumeros"/>
+
+      <xsd:element name="OperacionResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="resultado" type="xsd:double"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </types>
+
+  <!-- Mensajes -->
+  <message name="SumarInput"><part name="parameters" element="tns:SumarRequest"/></message>
+  <message name="SumarOutput"><part name="parameters" element="tns:OperacionResponse"/></message>
+
+  <message name="RestarInput"><part name="parameters" element="tns:RestarRequest"/></message>
+  <message name="RestarOutput"><part name="parameters" element="tns:OperacionResponse"/></message>
+
+  <message name="MultiplicarInput"><part name="parameters" element="tns:MultiplicarRequest"/></message>
+  <message name="MultiplicarOutput"><part name="parameters" element="tns:OperacionResponse"/></message>
+
+  <message name="DividirInput"><part name="parameters" element="tns:DividirRequest"/></message>
+  <message name="DividirOutput"><part name="parameters" element="tns:OperacionResponse"/></message>
+
+  <!-- Interfaz -->
+  <portType name="CalculadoraPortType">
+    <operation name="Sumar">        <input message="tns:SumarInput"/>        <output message="tns:SumarOutput"/>        </operation>
+    <operation name="Restar">       <input message="tns:RestarInput"/>       <output message="tns:RestarOutput"/>       </operation>
+    <operation name="Multiplicar">  <input message="tns:MultiplicarInput"/>  <output message="tns:MultiplicarOutput"/>  </operation>
+    <operation name="Dividir">      <input message="tns:DividirInput"/>      <output message="tns:DividirOutput"/>      </operation>
+  </portType>
+
+  <!-- Binding -->
+  <binding name="CalculadoraBinding" type="tns:CalculadoraPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="Sumar">        <soap:operation soapAction="SumarAction"/><input><soap:body use="literal"/></input><output><soap:body use="literal"/></output></operation>
+    <operation name="Restar">       <soap:operation soapAction="RestarAction"/><input><soap:body use="literal"/></input><output><soap:body use="literal"/></output></operation>
+    <operation name="Multiplicar">  <soap:operation soapAction="MultiplicarAction"/><input><soap:body use="literal"/></input><output><soap:body use="literal"/></output></operation>
+    <operation name="Dividir">      <soap:operation soapAction="DividirAction"/><input><soap:body use="literal"/></input><output><soap:body use="literal"/></output></operation>
+  </binding>
+
+  <!-- Service / Endpoint -->
+  <service name="ServicioCalculadora">
+    <port name="CalculadoraPort" binding="tns:CalculadoraBinding">
+      <!-- OJO: tu compa B reemplaza RENDER_HOST por la URL de Render -->
+      <soap:address location="RENDER_HOST/wsdl/calculadora"/>
+    </port>
+  </service>
+</definitions>
