@@ -1,50 +1,32 @@
 # Servicio Calculadora SOAP (WSDL)
 
-Servicio web **SOAP** basado en **WSDL** con cuatro operaciones:
-**Sumar**, **Restar**, **Multiplicar** y **Dividir**.
+Servicio web **SOAP** basado en **WSDL** con cuatro operaciones: **Sumar**, **Restar**, **Multiplicar** y **Dividir**.
 
 - Contrato: `wsdl/servicio.wsdl` (estilo **document/literal**)
 - Implementación: `index.js` (Node + Express + soap)
-- Deploy sin instalar nada: **Render** (desde este repo)
 - Cliente de pruebas: **Hoppscotch** (o Postman Web)
 
 ---
 
-## Despliegue en Render (rápido)
+## Endpoints (producción)
 
-1. Ve a https://render.com → New + → Web Service.
-2. Conecta tu GitHub y selecciona este repo.
-3. Configura:
-   - Environment: Node
-   - Build Command: npm install
-   - Start Command: npm start
-4. Crea el servicio y espera la URL pública, por ejemplo:
-   https://tu-dominio.onrender.com
-5. Actualiza el WSDL:
-   - Abre `wsdl/servicio.wsdl` en GitHub.
-   - Reemplaza `RENDER_HOST` por tu URL (incluye https://):
-     <soap:address location="https://tu-dominio.onrender.com/wsdl/calculadora"/>
-   - Guarda (commit). Si hace falta, en Render haz Redeploy.
+- **WSDL (contrato):**  
+  `https://servicio-wsdl-calculadora.onrender.com/wsdl`
 
-> Después del deploy, el WSDL queda visible en /wsdl.
-
----
-
-## Endpoints (después del deploy)
-
-- WSDL (contrato):  https://tu-dominio.onrender.com/wsdl
-- Endpoint SOAP:    https://tu-dominio.onrender.com/wsdl/calculadora
+- **Endpoint SOAP (POST):**  
+  `https://servicio-wsdl-calculadora.onrender.com/wsdl/calculadora`
 
 ---
 
 ## Probar con Hoppscotch / Postman Web
 
-Método: POST
-URL: https://tu-dominio.onrender.com/wsdl/calculadora
-Header: Content-Type: text/xml; charset=utf-8
-Namespace de los ejemplos: xmlns:cal="http://www.ejemplo.com/calculadora"
+**Método:** `POST`  
+**URL:** `https://servicio-wsdl-calculadora.onrender.com/wsdl/calculadora`  
+**Header:** `Content-Type: text/xml; charset=utf-8`  
+**Namespace de los ejemplos:** `xmlns:cal="http://www.ejemplo.com/calculadora"`
 
 ### 1) Sumar
+~~~xml
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
                   xmlns:cal="http://www.ejemplo.com/calculadora">
   <soapenv:Header/>
@@ -55,8 +37,10 @@ Namespace de los ejemplos: xmlns:cal="http://www.ejemplo.com/calculadora"
     </cal:SumarRequest>
   </soapenv:Body>
 </soapenv:Envelope>
+~~~
 
 ### 2) Restar
+~~~xml
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
                   xmlns:cal="http://www.ejemplo.com/calculadora">
   <soapenv:Header/>
@@ -67,8 +51,10 @@ Namespace de los ejemplos: xmlns:cal="http://www.ejemplo.com/calculadora"
     </cal:RestarRequest>
   </soapenv:Body>
 </soapenv:Envelope>
+~~~
 
 ### 3) Multiplicar
+~~~xml
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
                   xmlns:cal="http://www.ejemplo.com/calculadora">
   <soapenv:Header/>
@@ -79,8 +65,10 @@ Namespace de los ejemplos: xmlns:cal="http://www.ejemplo.com/calculadora"
     </cal:MultiplicarRequest>
   </soapenv:Body>
 </soapenv:Envelope>
+~~~
 
 ### 4) Dividir (con manejo de división entre cero)
+~~~xml
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
                   xmlns:cal="http://www.ejemplo.com/calculadora">
   <soapenv:Header/>
@@ -91,25 +79,25 @@ Namespace de los ejemplos: xmlns:cal="http://www.ejemplo.com/calculadora"
     </cal:DividirRequest>
   </soapenv:Body>
 </soapenv:Envelope>
-
-*Para b=0 el servicio devuelve `<resultado>NaN</resultado>` (válido para xsd:double).*
-
----
-
-## Evidencias para la entrega
-- Captura del WSDL abierto en /wsdl.
-- Capturas de request/response de las 4 operaciones.
-- (Opcional) Captura de logs en Render mostrando peticiones.
+~~~
+*Nota:* para `b=0` el servicio devuelve `<resultado>NaN</resultado>` (válido para `xsd:double`).
 
 ---
 
-## Trabajo en parejas
-- Alumno A: contrato WSDL, repo y este README (deja `RENDER_HOST` en `soap:address`).
-- Alumno B: deploy en Render, reemplazar `RENDER_HOST` por la URL pública, pruebas y capturas.
+## Despliegue (referencia)
+
+1. Render → **New +** → **Web Service** → Conectar GitHub.  
+2. **Build:** `npm install` — **Start:** `npm start`.  
+3. Ver URL pública (termina en `onrender.com`).  
+4. Verifica que en `wsdl/servicio.wsdl` la línea del endpoint sea:
+~~~xml
+<soap:address location="https://servicio-wsdl-calculadora.onrender.com/wsdl/calculadora"/>
+~~~
 
 ---
 
-## Notas técnicas
-- WSDL en document/literal para interoperabilidad.
-- Nombres coherentes entre `portType` ↔ `messages` ↔ métodos en `index.js`.
-- Namespace: `targetNamespace="http://www.ejemplo.com/calculadora"` y prefijo `tns` consistente.
+## Evidencias recomendadas
+
+- Captura del **WSDL** abierto en `/wsdl`.  
+- Capturas de **request/response** de las 4 operaciones.  
+- (Opcional) Captura de logs en Render.
