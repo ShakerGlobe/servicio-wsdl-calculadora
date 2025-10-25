@@ -66,8 +66,7 @@
   <!-- Service / Endpoint -->
   <service name="ServicioCalculadora">
     <port name="CalculadoraPort" binding="tns:CalculadoraBinding">
-      <!-- OJO: tu compa B reemplaza RENDER_HOST por la URL de Render -->
-      <soap:address location="RENDER_HOST/wsdl/calculadora"/>
+      <soap:address location="https://servicio-wsdl-calculadora.onrender.com/wsdl/calculadora"/>
     </port>
   </service>
 </definitions>
